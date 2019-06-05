@@ -49,9 +49,16 @@ func (sub *subscriberSingle) BlockExtractDataNotify(sourceKey string, data *open
 
 	log.Std.Notice("data.Transaction: %+v", data.Transaction)
 
+	tm := testInitWalletManager()
+	walletID := "WAJ3TuKDe9Ax69iZU84aBWNETUMaLHPCys"
+	accountID := "3rA23y9MakBnyJif4w1JdkYPL469eNd7vvPm9QMCz959"
+	balance, err := tm.GetAssetsAccountBalance(testApp, walletID, accountID)
+	if err != nil {
+		log.Error("GetAssetsAccountBalance failed, unexpected error:", err)
+	}
+	log.Info("balance:", balance)
 	return nil
 }
-
 
 func TestSubscribeAddress(t *testing.T) {
 
@@ -60,7 +67,7 @@ func TestSubscribeAddress(t *testing.T) {
 		symbol     = "PESS"
 		addrs      = map[string]string{
 			"GAECXQFHEMVMYJ7UUHL6NXJVZAUGYRIGW6STKUNT3QUIQRPN2ULJXTQ7": "sender",
-			"GCUH7EXP2H4KW7KL2Z3NGTNM3U6L23F35UOOKCAS7M2EYTU7SWBC2DAW": "sender",
+			"GBYSQ2RMGCMW22FIGYVES7ZA6BCBM7ZYXCSRNXL6OPCYD7C4RTUOQZ4Y": "receiver",
 		}
 	)
 
@@ -106,7 +113,7 @@ func TestSubscribeAddress(t *testing.T) {
 
 	//log.Debug("already got scanner:", assetsMgr)
 	scanner := assetsMgr.GetBlockScanner()
-	scanner.SetRescanBlockHeight(2512094)
+	//scanner.SetRescanBlockHeight(2856625)
 
 	if scanner == nil {
 		log.Error(symbol, "is not support block scan")
@@ -123,13 +130,12 @@ func TestSubscribeAddress(t *testing.T) {
 	<-endRunning
 }
 
-
 func TestBlockScanner_ExtractTransactionData(t *testing.T) {
 
 	var (
 		symbol = "PESS"
 		txid   = "th_d1NZsZs5P9hiHtawCcnSz95SAqPq9sdsrfkjxZzPs62zspUBK"
-		addrs      = map[string]string{
+		addrs  = map[string]string{
 			"ak_qcqXt6ySgRPvBkNwEpNMvaKWzrhPZsoBHLvgg68qg9vRht62y": "sender",
 			"ak_mPXUBSsSCJgfu3yz2i2AiVTtLA2TzMyMJL5e6X7shM9Qa246t": "sender",
 		}

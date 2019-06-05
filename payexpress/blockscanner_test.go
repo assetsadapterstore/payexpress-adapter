@@ -47,7 +47,7 @@ func TestPESSBlockScanner_GetBlockByHeight(t *testing.T) {
 
 func TestPESSBlockScanner_GetBlockByHash(t *testing.T) {
 	wm := testNewWalletManager()
-	block, err := wm.Blockscanner.GetBlockByHash("JAYxPf1hAnEdxFVzQNTNRrrcBUDvQZruDmR2R1DahWtt")
+	block, err := wm.Blockscanner.GetBlockByHash("7oVvXaXdb8nF47ffzPJ3VKt57KfZgCBzDpGwpBojmr63")
 	if err != nil {
 		t.Errorf("unexpected error: %v", err)
 		return
@@ -57,7 +57,7 @@ func TestPESSBlockScanner_GetBlockByHash(t *testing.T) {
 
 func TestPESSBlockScanner_GetTransaction(t *testing.T) {
 	wm := testNewWalletManager()
-	tx, err := wm.Blockscanner.GetTransaction("7hqRUTBNE8tvnq2xwxA5rYbJyVbTptxdbMHLsXZQVePQ")
+	tx, err := wm.Blockscanner.GetTransaction("2jmL3QQTrJPdjanBaUZcHThd3zedz52roazjQsQ6jYm1")
 	if err != nil {
 		t.Errorf("unexpected error: %v", err)
 		return

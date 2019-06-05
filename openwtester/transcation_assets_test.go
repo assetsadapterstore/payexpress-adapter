@@ -136,7 +136,7 @@ func TestTransfer_PESS(t *testing.T) {
 
 	testGetAssetsAccountBalance(tm, walletID, accountID)
 
-	rawTx, err := testCreateTransactionStep(tm, walletID, accountID, to, "1", "0.2", nil)
+	rawTx, err := testCreateTransactionStep(tm, walletID, accountID, to, "0.01234", "", nil)
 	if err != nil {
 		return
 	}
@@ -157,7 +157,6 @@ func TestTransfer_PESS(t *testing.T) {
 	if err != nil {
 		return
 	}
-
 
 	testGetAssetsAccountBalance(tm, walletID, accountID)
 

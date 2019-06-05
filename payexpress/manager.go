@@ -15,7 +15,7 @@ type WalletManager struct {
 	TxDecoder       openwallet.TransactionDecoder   //交易单编码器
 	Log             *log.OWLogger                   //日志工具
 	ContractDecoder openwallet.SmartContractDecoder //智能合约解析器
-	Blockscanner    *PESSBlockScanner                 //区块扫描器
+	Blockscanner    *PESSBlockScanner               //区块扫描器
 	client          *Client                         //本地封装的http client
 }
 
@@ -48,10 +48,10 @@ func (wm *WalletManager) GetAccounts(address string) (*AddrBalance, bool, error)
 
 // BroadcastTransaction 广播交易单
 func (wm *WalletManager) BroadcastTransaction(tx *transaction.Transaction) (string, error) {
-	r, err := wm.client.Call("transactions", "POST", tx)
+	_, err := wm.client.Call("transactions", "POST", tx)
 	if err != nil {
 		return "", err
 	}
-	txid := r.Get("hash").String()
+	txid := tx.GetHash()
 	return txid, nil
 }

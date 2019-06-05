@@ -482,7 +482,7 @@ func (bs *PESSBlockScanner) BatchExtractTransaction(blockHeight uint64, blockHas
 	)
 
 	if len(txs) == 0 {
-		return fmt.Errorf("BatchExtractTransaction block is nil.")
+		return nil
 	}
 
 	//生产通道
@@ -741,7 +741,6 @@ func (bs *PESSBlockScanner) extractTxInput(tx *Operation, txExtractData *openwal
 	txInput.Recharge.Index = 0 //账户模型填0
 	txInput.Recharge.CreateAt = tx.Time
 	txExtractData.TxInputs = append(txExtractData.TxInputs, txInput)
-
 
 	//手续费也作为一个输出s
 	fees := common.BigIntToDecimals(tx.Fee, bs.wm.Decimal())
