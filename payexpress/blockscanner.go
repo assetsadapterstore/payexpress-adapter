@@ -627,39 +627,42 @@ func (bs *PESSBlockScanner) ExtractTransaction(blockHeight uint64, blockHash str
 	//提出交易单明细
 	for _, operation := range trx.Operations {
 
-		operation.BlockHash = trx.BlockHash
-		operation.BlockHeight = trx.BlockHeight
+		if operation.Type == "payment" || operation.Type == "create-account" {
 
-		from := trx.Source
-		to := operation.Target
+			operation.BlockHash = trx.BlockHash
+			operation.BlockHeight = trx.BlockHeight
 
-		//bs.wm.Log.Std.Info("block scanner scanning tx: %+v", txid)
-		//订阅地址为交易单中的发送者
-		accountId, ok1 := scanTargetFunc(openwallet.ScanTarget{
-			Address:          from,
-			BalanceModelType: openwallet.BalanceModelTypeAddress,
-		})
-		//订阅地址为交易单中的接收者
-		accountId2, ok2 := scanTargetFunc(openwallet.ScanTarget{
-			Address:          to,
-			BalanceModelType: openwallet.BalanceModelTypeAddress,
-		})
+			from := trx.Source
+			to := operation.Target
 
-		//相同账户
-		if accountId == accountId2 && len(accountId) > 0 && len(accountId2) > 0 {
-			bs.InitExtractResult(operation, accountId, &result, 0)
-		} else {
-			if ok1 {
-				bs.InitExtractResult(operation, accountId, &result, 1)
+			//bs.wm.Log.Std.Info("block scanner scanning tx: %+v", txid)
+			//订阅地址为交易单中的发送者
+			accountId, ok1 := scanTargetFunc(openwallet.ScanTarget{
+				Address:          from,
+				BalanceModelType: openwallet.BalanceModelTypeAddress,
+			})
+			//订阅地址为交易单中的接收者
+			accountId2, ok2 := scanTargetFunc(openwallet.ScanTarget{
+				Address:          to,
+				BalanceModelType: openwallet.BalanceModelTypeAddress,
+			})
+
+			//相同账户
+			if accountId == accountId2 && len(accountId) > 0 && len(accountId2) > 0 {
+				bs.InitExtractResult(operation, accountId, &result, 0)
+			} else {
+				if ok1 {
+					bs.InitExtractResult(operation, accountId, &result, 1)
+				}
+
+				if ok2 {
+					bs.InitExtractResult(operation, accountId2, &result, 2)
+				}
 			}
 
-			if ok2 {
-				bs.InitExtractResult(operation, accountId2, &result, 2)
-			}
+			success = true
+
 		}
-
-		success = true
-
 	}
 
 	result.Success = success

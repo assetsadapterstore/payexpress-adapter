@@ -129,14 +129,14 @@ func TestTransfer_PESS(t *testing.T) {
 	walletID := "WAJ3TuKDe9Ax69iZU84aBWNETUMaLHPCys"
 	accountID := "3rA23y9MakBnyJif4w1JdkYPL469eNd7vvPm9QMCz959"
 	//to := "GBYSQ2RMGCMW22FIGYVES7ZA6BCBM7ZYXCSRNXL6OPCYD7C4RTUOQZ4Y"
-	to := "GBYSQ2RMGCMW22FIGYVES7ZA6BCBM7ZYXCSRNXL6OPCYD7C4RTUOQZ4Y"
+	to := "GAKYJRX644NQ667AHLE7SUZ2GS2SIWY2IPRPLZWSENWD4TDC22CTBSCN"
 
 	//accountID := "FSMnUMMGZ33LWhNNUGcdYmgrevQgQFUeWLdndjzarfuL"
 	//to := "ak_qcqXt6ySgRPvBkNwEpNMvaKWzrhPZsoBHLvgg68qg9vRht62y"
 
 	testGetAssetsAccountBalance(tm, walletID, accountID)
 
-	rawTx, err := testCreateTransactionStep(tm, walletID, accountID, to, "0.01234", "", nil)
+	rawTx, err := testCreateTransactionStep(tm, walletID, accountID, to, "0.2", "", nil)
 	if err != nil {
 		return
 	}
@@ -166,7 +166,7 @@ func TestSummary_PESS(t *testing.T) {
 	tm := testInitWalletManager()
 	walletID := "WAJ3TuKDe9Ax69iZU84aBWNETUMaLHPCys"
 	accountID := "FSMnUMMGZ33LWhNNUGcdYmgrevQgQFUeWLdndjzarfuL"
-	summaryAddress := "GAECXQFHEMVMYJ7UUHL6NXJVZAUGYRIGW6STKUNT3QUIQRPN2ULJXTQ7"
+	summaryAddress := "GAKYJRX644NQ667AHLE7SUZ2GS2SIWY2IPRPLZWSENWD4TDC22CTBSCN"
 
 	testGetAssetsAccountBalance(tm, walletID, accountID)
 
