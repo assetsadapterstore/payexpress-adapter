@@ -67,9 +67,9 @@ func (decoder *TransactionDecoder) CreateRawTransaction(wrapper openwallet.Walle
 
 	//计算手续费
 	feeInfo = &txFeeInfo{
-		Fee: fixFees,
+		Fee:      fixFees,
 		GasPrice: fixFees,
-		GasUsed: big.NewInt(1),
+		GasUsed:  big.NewInt(1),
 	}
 
 	for _, addr := range addresses {
@@ -154,7 +154,7 @@ func (decoder *TransactionDecoder) SignRawTransaction(wrapper openwallet.WalletD
 
 			decoder.wm.Log.Debugf("message: %s", hex.EncodeToString(msg))
 			decoder.wm.Log.Debugf("publicKey: %s", hex.EncodeToString(publicKey))
-			decoder.wm.Log.Debugf("privateKey : %s", hex.EncodeToString(keyBytes))
+			decoder.wm.Log.Debugf("nonce : %s", keySignature.Nonce)
 			decoder.wm.Log.Debugf("signature: %s", hex.EncodeToString(sig))
 
 			keySignature.Signature = hex.EncodeToString(sig)
@@ -241,6 +241,17 @@ func (decoder *TransactionDecoder) SubmitRawTransaction(wrapper openwallet.Walle
 
 	log.Infof("Transaction [%s] submitted to the network successfully.", txid)
 
+	//广播成功后记录nonce值到本地
+	//支持多重签名
+	//for _, keySignatures := range rawTx.Signatures {
+	//	for _, keySignature := range keySignatures {
+	//		nonce := common.NewString(keySignature.Nonce).UInt64()
+	//		nonce++ //递增nonce
+	//		log.Debugf("set address new nonce: %d", nonce)
+	//		wrapper.SetAddressExtParam(keySignature.Address.Address, PESS_SEQUENCEID_KEY, nonce)
+	//	}
+	//}
+
 	rawTx.TxID = txid
 	rawTx.IsSubmit = true
 
@@ -306,9 +317,9 @@ func (decoder *TransactionDecoder) CreateSummaryRawTransaction(wrapper openwalle
 	//计算手续费
 	//计算手续费
 	feeInfo = &txFeeInfo{
-		Fee: fixFees,
+		Fee:      fixFees,
 		GasPrice: fixFees,
-		GasUsed: big.NewInt(1),
+		GasUsed:  big.NewInt(1),
 	}
 
 	for _, addr := range addresses {
@@ -385,7 +396,7 @@ func (decoder *TransactionDecoder) createRawTransaction(
 		keySignList      = make([]*openwallet.KeySignature, 0)
 		amountStr        string
 		destination      string
-		ob operation.Body
+		ob               operation.Body
 	)
 
 	decimals := int32(0)
@@ -416,6 +427,8 @@ func (decoder *TransactionDecoder) createRawTransaction(
 		return err
 	}
 
+	nonce := decoder.GetNewNonce(wrapper, addrBalance)
+
 	amount := common.StringNumToBigIntWithExp(amountStr, decimals)
 
 	//: 查询目标地址是否存在
@@ -443,7 +456,7 @@ func (decoder *TransactionDecoder) createRawTransaction(
 		return err
 	}
 
-	tx, err := transaction.NewTransaction(addrBalance.Address, addrBalance.SequenceID, o)
+	tx, err := transaction.NewTransaction(addrBalance.Address, nonce, o)
 	if err != nil {
 		return err
 	}
@@ -466,6 +479,7 @@ func (decoder *TransactionDecoder) createRawTransaction(
 	signature := openwallet.KeySignature{
 		EccType: decoder.wm.Config.CurveType,
 		Address: addr,
+		Nonce:   common.NewString(nonce).String(),
 		Message: hex.EncodeToString(msg),
 	}
 	keySignList = append(keySignList, &signature)
@@ -501,4 +515,34 @@ func (decoder *TransactionDecoder) CreateSummaryRawTransactionWithError(wrapper 
 		})
 	}
 	return raTxWithErr, nil
+}
+
+//GetNewNonce  确定txdecode nonce值
+func (decoder *TransactionDecoder) GetNewNonce(wrapper openwallet.WalletDAI, addr *AddrBalance) uint64 {
+
+	var (
+		nonce        uint64
+		nonce_submit uint64
+	)
+	//获取db记录的nonce并确认nonce值
+	//nonce_cache, _ := wrapper.GetAddressExtParam(addr.Address, PESS_SEQUENCEID_KEY)
+	////判断nonce_db是否为空,为空则说明当前nonce是0
+	//if nonce_cache == nil {
+	//	nonce = addr.SequenceID
+	//} else {
+	//	nonce = common.NewString(nonce_cache).UInt64()
+	//}
+
+	nonce_chain := addr.SequenceID
+
+	//如果本地nonce_db > 链上nonce,采用本地nonce,否则采用链上nonce
+	if nonce > nonce_chain {
+		log.Debugf("use cache nonce")
+		nonce_submit = nonce
+	} else {
+		log.Debugf("use chain nonce")
+		nonce_submit = nonce_chain
+	}
+
+	return nonce_submit
 }

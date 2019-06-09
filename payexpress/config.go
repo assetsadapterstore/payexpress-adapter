@@ -11,6 +11,7 @@ const (
 	//币种
 	Symbol    = "PESS"
 	CurveType = owcrypt.ECC_CURVE_ED25519
+	PESS_SEQUENCEID_KEY = "PESS_SEQUENCEID_KEY"
 
 	//默认配置内容
 	defaultConfig = `

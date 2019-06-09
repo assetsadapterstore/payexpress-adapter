@@ -129,33 +129,37 @@ func TestTransfer_PESS(t *testing.T) {
 	walletID := "WAJ3TuKDe9Ax69iZU84aBWNETUMaLHPCys"
 	accountID := "3rA23y9MakBnyJif4w1JdkYPL469eNd7vvPm9QMCz959"
 	//to := "GBYSQ2RMGCMW22FIGYVES7ZA6BCBM7ZYXCSRNXL6OPCYD7C4RTUOQZ4Y"
-	to := "GAKYJRX644NQ667AHLE7SUZ2GS2SIWY2IPRPLZWSENWD4TDC22CTBSCN"
+	to := "GBYSQ2RMGCMW22FIGYVES7ZA6BCBM7ZYXCSRNXL6OPCYD7C4RTUOQZ4Y"
 
 	//accountID := "FSMnUMMGZ33LWhNNUGcdYmgrevQgQFUeWLdndjzarfuL"
 	//to := "ak_qcqXt6ySgRPvBkNwEpNMvaKWzrhPZsoBHLvgg68qg9vRht62y"
 
 	testGetAssetsAccountBalance(tm, walletID, accountID)
 
-	rawTx, err := testCreateTransactionStep(tm, walletID, accountID, to, "0.2", "", nil)
-	if err != nil {
-		return
-	}
+	for i := 0; i < 1; i++ {
 
-	log.Std.Info("rawTx: %+v", rawTx)
+		rawTx, err := testCreateTransactionStep(tm, walletID, accountID, to, "0.001", "", nil)
+		if err != nil {
+			return
+		}
 
-	_, err = testSignTransactionStep(tm, rawTx)
-	if err != nil {
-		return
-	}
+		log.Std.Info("rawTx: %+v", rawTx)
 
-	_, err = testVerifyTransactionStep(tm, rawTx)
-	if err != nil {
-		return
-	}
+		_, err = testSignTransactionStep(tm, rawTx)
+		if err != nil {
+			return
+		}
 
-	_, err = testSubmitTransactionStep(tm, rawTx)
-	if err != nil {
-		return
+		_, err = testVerifyTransactionStep(tm, rawTx)
+		if err != nil {
+			return
+		}
+
+		_, err = testSubmitTransactionStep(tm, rawTx)
+		if err != nil {
+			return
+		}
+
 	}
 
 	testGetAssetsAccountBalance(tm, walletID, accountID)
