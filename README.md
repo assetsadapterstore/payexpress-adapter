@@ -18,6 +18,8 @@ activeBalance = "0.1"
 # PESS networkID, default(mainnet) networkID = "sebak-payexpress-network; 2018-12-18",
 ;networkID = "sebak-payexpress-network; 2018-12-18"
 networkID = "sebak-test-network"
+# Cache data file directory, default = "", current directory: ./data
+dataDir = ""
 
 ```
 

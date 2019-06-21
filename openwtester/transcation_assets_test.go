@@ -18,6 +18,7 @@ package openwtester
 import (
 	"github.com/blocktree/openwallet/openw"
 	"testing"
+	"time"
 
 	"github.com/blocktree/openwallet/log"
 	"github.com/blocktree/openwallet/openwallet"
@@ -136,7 +137,7 @@ func TestTransfer_PESS(t *testing.T) {
 
 	testGetAssetsAccountBalance(tm, walletID, accountID)
 
-	for i := 0; i < 1; i++ {
+	for i := 0; i < 10; i++ {
 
 		rawTx, err := testCreateTransactionStep(tm, walletID, accountID, to, "0.001", "", nil)
 		if err != nil {
@@ -159,6 +160,8 @@ func TestTransfer_PESS(t *testing.T) {
 		if err != nil {
 			return
 		}
+
+		time.Sleep(10 * time.Second)
 
 	}
 

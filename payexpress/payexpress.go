@@ -55,6 +55,10 @@ func (wm *WalletManager) LoadAssetsConfig(c config.Configer) error {
 	wm.Config.FixFees = c.String("fixFees")
 	wm.Config.ActiveBalance = c.String("activeBalance")
 	wm.Config.NetworkID = c.String("networkID")
+	wm.Config.DataDir = c.String("dataDir")
+
+	//数据文件夹
+	wm.Config.makeDataDir()
 	return nil
 }
 
