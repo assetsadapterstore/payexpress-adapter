@@ -8,7 +8,8 @@ require (
 	github.com/astaxie/beego v1.11.1
 	github.com/blocktree/go-owcdrivers v1.0.14 // indirect
 	github.com/blocktree/go-owcrypt v1.0.1
-	github.com/blocktree/openwallet v1.4.3
+	github.com/blocktree/openwallet v1.5.5
+	github.com/golang/protobuf v1.3.1 // indirect
 	github.com/imroc/req v0.2.3
 	github.com/kr/pretty v0.1.0 // indirect
 	github.com/lib/pq v1.1.1 // indirect
@@ -18,5 +19,6 @@ require (
 	github.com/shopspring/decimal v0.0.0-20180709203117-cd690d0c9e24
 	github.com/stellar/go v0.0.0-20190524214719-77008586ebb9
 	github.com/tidwall/gjson v1.2.1
+	github.com/vmihailenco/msgpack v4.0.4+incompatible // indirect
 	golang.org/x/crypto v0.0.0-20190513172903-22d7a77e9e5f // indirect
 )

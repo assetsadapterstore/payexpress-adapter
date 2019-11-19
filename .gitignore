@@ -3,5 +3,5 @@ release
 .vscode
 .idea
 *.key
-payexpress/conf
+*.ini
 go.sum
